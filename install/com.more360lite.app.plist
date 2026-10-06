@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  TEMPLATE — troque todo "/Users/SEU_USUARIO/more360-lite" abaixo pelo
+  caminho real onde você clonou o projeto antes de instalar. Depois:
+    cp install/com.more360lite.app.plist ~/Library/LaunchAgents/
+    launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.more360lite.app.plist
+  Ver README.md § "Deixar rodando sempre (macOS)" pra detalhes e pro aviso
+  sobre a pasta não poder ficar dentro de Documentos/Desktop/Downloads.
+-->
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.more360lite.app</string>
+
+	<key>ProgramArguments</key>
+	<array>
+		<string>/Users/SEU_USUARIO/more360-lite/scripts/start-prod.sh</string>
+	</array>
+
+	<key>WorkingDirectory</key>
+	<string>/Users/SEU_USUARIO/more360-lite</string>
+
+	<!-- Sobe junto com o login do usuário e reinicia sozinho se cair
+	     (crash, "npm run build" rodando por cima, etc). -->
+	<key>RunAtLoad</key>
+	<true/>
+	<key>KeepAlive</key>
+	<true/>
+
+	<!-- Limita reinícios em loop de erro — se cair com menos de 10s de vida,
+	     espera 10s antes de tentar de novo, em vez de martelar o processo. -->
+	<key>ThrottleInterval</key>
+	<integer>10</integer>
+
+	<key>StandardOutPath</key>
+	<string>/Users/SEU_USUARIO/Library/Logs/more360-lite.log</string>
+	<key>StandardErrorPath</key>
+	<string>/Users/SEU_USUARIO/Library/Logs/more360-lite.err.log</string>
+
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>NODE_ENV</key>
+		<string>production</string>
+		<key>PATH</key>
+		<string>/opt/homebrew/bin:/opt/homebrew/opt/postgresql@15/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+	</dict>
+</dict>
+</plist>

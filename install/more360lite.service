@@ -1,0 +1,27 @@
+# TEMPLATE — ajuste WorkingDirectory/ExecStart se clonar fora de
+# /opt/more360-lite, e troque User=root por um usuário sem privilégio se
+# for rodar em produção de verdade. Depois:
+#   sudo cp install/more360lite.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now more360lite.service
+# Ver README.md § "Deixar rodando sempre (Linux)".
+
+[Unit]
+Description=More 360 Lite (Next.js)
+After=network.target postgresql.service
+Wants=postgresql.service
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/more360-lite
+ExecStart=/usr/bin/node /opt/more360-lite/node_modules/.bin/next start -p 3010
+Restart=always
+RestartSec=5
+Environment=NODE_ENV=production
+User=root
+
+StandardOutput=append:/var/log/more360-lite.log
+StandardError=append:/var/log/more360-lite.err.log
+
+[Install]
+WantedBy=multi-user.target
